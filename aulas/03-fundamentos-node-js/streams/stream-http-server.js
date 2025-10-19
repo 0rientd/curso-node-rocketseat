@@ -11,10 +11,21 @@ class InverseNumberStream extends Transform {
   }
 }
 
-const server = http.createServer((req, res) => {
-  return req
-    .pipe(new InverseNumberStream())
-    .pipe(res)
+const server = http.createServer(async (req, res) => {
+  const buffers = []
+
+  // Vai aguardar cada pedaço de dado (chunk) chegar até o final da requisição
+  for await (const chunk of req) {
+    // Vai atualizar o array de buffers com cada pedaço de dado (chunk)
+    buffers.push(chunk)
+  }
+
+  // Só irá processar os dados quando a requisição estiver completa
+  const fullStreamContent = Buffer.concat(buffers).toString()
+
+  console.log('Requisição completa:', fullStreamContent)
+
+  return res.end(fullStreamContent)
 })
 
 server.listen(3334)

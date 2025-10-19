@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "node --watch src/server.js"
+    "init-stream-server": "node --watch streams/stream-http-server.js",
+    "fake-stream-data": "node --watch streams/fake-upload-to-http-stream.js"
   },
   "keywords": [],
   "author": "",
