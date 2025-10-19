@@ -1,10 +1,11 @@
 // Import da classe Readable do módulo 'stream' do Node.js
-import { Readable } from 'node:stream'
+import { Readable, Writable } from 'node:stream'
 
 // Herdando da classe Readable
 class OneToHundredStream extends Readable {
   index = 1
 
+  // _read é um método obrigatório que deve ser implementado em classes que estendem Readable
   _read() {
     const i = this.index++
 
@@ -25,5 +26,14 @@ class OneToHundredStream extends Readable {
   }
 }
 
+class MultiplyByTenStream extends Writable {
+  // _write é um método obrigatório que deve ser implementado em classes que estendem Writable
+  _write(chunk, encoding, callback) {
+    console.log(Number(chunk.toString()) * 10 )
+    callback()
+  }
+}
+
+// pipe é um método das streams que conecta a saída de uma stream à entrada de outra
 new OneToHundredStream()
-  .pipe(process.stdout)
+  .pipe(new MultiplyByTenStream())
