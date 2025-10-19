@@ -1,5 +1,5 @@
 // Import da classe Readable do módulo 'stream' do Node.js
-import { Readable, Writable } from 'node:stream'
+import { Readable, Writable, Transform } from 'node:stream'
 
 // Herdando da classe Readable
 class OneToHundredStream extends Readable {
@@ -26,6 +26,15 @@ class OneToHundredStream extends Readable {
   }
 }
 
+class InverseNumberStream extends Transform {
+  // _transform é um método obrigatório que deve ser implementado em classes que estendem Transform
+  _transform(chunk, encoding, callback) {
+    const transformed = Number(chunk.toString()) * -1
+
+    callback(null, Buffer.from(transformed.toString()))
+  }
+}
+
 class MultiplyByTenStream extends Writable {
   // _write é um método obrigatório que deve ser implementado em classes que estendem Writable
   _write(chunk, encoding, callback) {
@@ -36,4 +45,5 @@ class MultiplyByTenStream extends Writable {
 
 // pipe é um método das streams que conecta a saída de uma stream à entrada de outra
 new OneToHundredStream()
+  .pipe(new InverseNumberStream())
   .pipe(new MultiplyByTenStream())
