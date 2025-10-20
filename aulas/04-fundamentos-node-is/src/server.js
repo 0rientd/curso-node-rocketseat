@@ -1,6 +1,6 @@
 import http from 'http'
 import { json } from './middlewares/json.js'
-import { Database } from './middlewares/database.js'
+import { Database } from './database.js'
 
 const database = new Database()
 
